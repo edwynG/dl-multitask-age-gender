@@ -7,7 +7,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")
 from datetime import datetime
 from flask import Flask, render_template, request, jsonify
 from web.inference import inference_service
-from web.config import DEVICE
+from web.config import DEVICE, BENCHMARK_METRICS
 
 # inicializamos la aplicación flask con las rutas a static y templates
 app = Flask(
@@ -22,6 +22,7 @@ def inject_globals():
     """Inyecta variables globales en todas las plantillas Jinja2."""
     return {
         "current_year": datetime.now().year,
+        "benchmark_metrics": BENCHMARK_METRICS,
     }
 
 

@@ -29,3 +29,17 @@ NORM_STD = [0.2591, 0.2315, 0.2270]
 
 # selección automática del dispositivo de inferencia (gpu cuda si está disponible)
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+# métricas oficiales del conjunto de prueba obtenidas durante el entrenamiento en el notebook
+BENCHMARK_METRICS = {
+    "gender": {
+        "accuracy": "88.7%",
+    },
+    "age": {
+        "mae": "6.92 años",
+    },
+    "multitask": {
+        "accuracy": "89.5%",
+        "mae": "8.73 años",
+    },
+}
