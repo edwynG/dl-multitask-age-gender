@@ -1,0 +1,138 @@
+/* ==========================================================================
+   Design System: Warm Scientific Minimalism
+   Laboratorio de Visión por Computador - Multitask Face Lab (UCV)
+   ========================================================================== */
+
+:root {
+  /* Paleta cromática institucional y experimental */
+  --surface-bright: #faf9f7;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f5f3f0;
+  --surface-container: #efedea;
+  --surface-container-high: #e9e7e3;
+  --surface-container-highest: #e3e1dc;
+  --surface: #faf9f7;
+  --on-surface: #1c1a19;
+  --on-surface-variant: #5a504b;
+
+  /* Terracota rust de acento prioritario */
+  --primary: #9f3c16;
+  --primary-hover: #b24f2b;
+  --primary-container: #bf542c;
+  --on-primary: #ffffff;
+  --primary-light: rgba(159, 60, 22, 0.08);
+  --primary-ring: rgba(159, 60, 22, 0.2);
+
+  /* Tonos secundarios y bordes */
+  --secondary: #5e5852;
+  --outline: #8d817b;
+  --outline-variant: #ddd5cf;
+  --outline-subtle: rgba(221, 213, 207, 0.6);
+
+  /* Tipografías */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* Base y reseteo suave */
+html {
+  font-family: var(--font-sans);
+  background-color: var(--surface);
+  color: var(--on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Soporte para áreas seguras en dispositivos móviles */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.pt-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+}
+
+/* Tipografía monoespaciada para métricas numéricas tabulares */
+.font-mono-tag {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Transiciones sutiles para elementos interactivos */
+.transition-smooth {
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Iconos vectoriales SVG limpios */
+.icon-svg {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1.125rem;
+  height: 1.125rem;
+  stroke-width: 2;
+  stroke: currentColor;
+  fill: none;
+  flex-shrink: 0;
+}
+
+.icon-svg-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.icon-svg-lg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* Tarjeta destacada multitarea con borde cálido sutil */
+.card-multitask {
+  background-color: var(--surface-container-low);
+  border: 1px solid rgba(159, 60, 22, 0.3);
+  box-shadow: 0 4px 20px -4px rgba(159, 60, 22, 0.05);
+}
+
+/* Pastillas de muestras activas e inactivas */
+.sample-btn-active {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  border: 1px solid var(--primary-ring);
+  font-weight: 500;
+}
+
+.sample-btn-inactive {
+  background-color: var(--surface-container);
+  color: var(--on-surface-variant);
+  border: 1px solid transparent;
+}
+
+.sample-btn-inactive:hover {
+  background-color: var(--surface-container-high);
+}
+
+/* Animación de rotación para recarga de modelos */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin-custom {
+  animation: spin-slow 0.8s linear infinite;
+}
+
+/* Transición suave para el visor facial */
+#face-preview {
+  transition: opacity 0.25s ease-in-out;
+}

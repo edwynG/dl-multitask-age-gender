@@ -1,0 +1,59 @@
+<!-- Controles y visor facial de la muestra -->
+<div class="space-y-4">
+  <!-- Controles interactivos: Cámara, carga de archivo y muestras predeterminadas -->
+  <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-outline-variant/30">
+    <div class="flex items-center gap-2">
+      <!-- Botón para alternar la cámara web -->
+      <button class="px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface" id="btn-webcam">
+        <img src="{{ url_for('static', filename='icons/videocam.svg') }}" alt="Cámara" class="w-4 h-4 shrink-0" id="cam-icon">
+        <span id="cam-status">Activar cámara web</span>
+      </button>
+
+      <!-- Botón para tomar foto fija desde la cámara web activa -->
+      <button class="hidden px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-primary hover:bg-primary/90 text-on-primary shadow-sm active:scale-95" id="btn-capture-snapshot" type="button">
+        <img src="{{ url_for('static', filename='icons/photo_camera.svg') }}" alt="Capturar foto" class="w-4 h-4 shrink-0 brightness-0 invert">
+        <span>Tomar foto</span>
+      </button>
+
+      <!-- Botón para subir foto personalizada desde disco -->
+      <label class="px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface cursor-pointer">
+        <img src="{{ url_for('static', filename='icons/photo_camera.svg') }}" alt="Subir" class="w-4 h-4 shrink-0">
+        <span>Subir foto</span>
+        <input accept="image/*" class="hidden" id="file-input" type="file">
+      </label>
+    </div>
+
+    <!-- Selector de muestras normalizadas de prueba -->
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-on-surface-variant font-normal">Muestras:</span>
+      <div class="flex gap-1.5" id="sample-triggers">
+        <button class="sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag sample-btn-active" data-sample="1">Muestra 1 (Bebé)</button>
+        <button class="sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag sample-btn-inactive" data-sample="2">Muestra 2 (Adulto)</button>
+        <button class="sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag sample-btn-inactive" data-sample="3">Muestra 3 (Anciano)</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Visor de la imagen o video en vivo -->
+  <div class="space-y-2.5">
+    <div class="relative rounded-xl overflow-hidden bg-surface-container border border-outline-variant/40 aspect-square flex items-center justify-center max-h-[380px] sm:max-h-[420px] mx-auto w-full">
+      <!-- Imagen de la muestra -->
+      <img alt="Muestra facial para análisis" class="w-full h-full object-cover transition-opacity duration-200" id="face-preview" src="{{ url_for('static', filename='img/sample1.jpg') }}">
+      
+      <!-- Video en vivo para transmisión por cámara web -->
+      <video class="w-full h-full object-cover hidden" id="webcam-video" autoplay playsinline muted></video>
+
+      <!-- Indicador de cámara web activa -->
+      <div class="hidden absolute top-3 right-3 px-2.5 py-1 rounded-full bg-emerald-700/90 text-white text-[11px] font-mono-tag flex items-center gap-1.5 shadow-sm" id="live-indicator">
+        <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
+        <span>Transmisión activa</span>
+      </div>
+    </div>
+
+    <!-- Metadatos de la imagen y dimensiones de entrada -->
+    <div class="flex items-center justify-between text-xs font-mono-tag text-on-surface-variant px-0.5">
+      <span id="label-ground-truth">Referencia: Masculino - 1 año</span>
+      <span class="px-2 py-0.5 rounded-md bg-surface-container border border-outline-variant/30 text-[11px]">Entrada: 200×200 px</span>
+    </div>
+  </div>
+</div>

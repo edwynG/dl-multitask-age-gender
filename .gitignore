@@ -10,6 +10,7 @@ __pycache__/
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
+/mockups
 
 # Datos y datasets locales descargados
 *.tar.gz
@@ -19,7 +20,8 @@ __pycache__/
 
 # Model checkpoints y logs
 *.pt
-*.pth
+
 *.onnx
+*.crdownload
 runs/
 logs/
