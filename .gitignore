@@ -1,0 +1,23 @@
+# Entornos virtuales
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Datos y datasets locales descargados
+*.tar.gz
+*.zip
+
+# Model checkpoints y logs
+*.pt
+*.pth
+*.onnx
+runs/
+logs/
