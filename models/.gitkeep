@@ -1,0 +1,2 @@
+# Carpeta para almacenar los checkpoints y pesos de los modelos (.pth)
+# Los archivos binarios de pesos están excluidos del control de versiones mediante .gitignore.
