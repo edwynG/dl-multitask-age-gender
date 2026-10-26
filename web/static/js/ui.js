@@ -20,6 +20,7 @@ export const dom = {
   camStatus: document.getElementById("cam-status"),
   camIcon: document.getElementById("cam-icon"),
   btnSnapshot: document.getElementById("btn-capture-snapshot"),
+  btnFlipFloating: document.getElementById("btn-flip-floating"),
   btnReload: document.getElementById("btn-reload-models"),
   iconReload: document.getElementById("icon-reload"),
   statusText: document.getElementById("status-text"),

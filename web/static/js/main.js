@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (dom.video) dom.video.classList.add("hidden");
     if (dom.liveIndicator) dom.liveIndicator.classList.add("hidden");
     if (dom.btnSnapshot) dom.btnSnapshot.classList.add("hidden");
+    if (dom.btnFlipFloating) dom.btnFlipFloating.classList.add("hidden");
     if (dom.labelFileInput) {
       dom.labelFileInput.classList.remove("hidden", "sm:flex");
     }
@@ -141,6 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (dom.preview) dom.preview.classList.add("hidden");
       if (dom.liveIndicator) dom.liveIndicator.classList.remove("hidden");
+      if (dom.btnFlipFloating) dom.btnFlipFloating.classList.remove("hidden");
       if (dom.btnSnapshot) {
         dom.btnSnapshot.className =
           "h-9 sm:h-10 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-on-primary shadow-sm active:scale-95";
@@ -205,6 +207,20 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 700);
   }
 
+  /**
+   * Alterna entre cámara frontal y trasera en tiempo real desde el botón flotante del visor.
+   */
+  async function handleSwitchCamera() {
+    try {
+      await webcam.switchCamera();
+      if (dom.video) {
+        setDimensions(dom.video.videoWidth, dom.video.videoHeight);
+      }
+    } catch (err) {
+      console.warn("No se pudo alternar la cámara:", err);
+    }
+  }
+
   // --- Registro de eventos de la interfaz ---
 
   // Botones de muestras predeterminadas
@@ -223,6 +239,11 @@ document.addEventListener("DOMContentLoaded", () => {
       if (webcam.isActive) stopWebcam();
       else startWebcam();
     });
+  }
+
+  // Botón flotante para alternar cámara frontal / trasera en el visor
+  if (dom.btnFlipFloating) {
+    dom.btnFlipFloating.addEventListener("click", handleSwitchCamera);
   }
 
   // Botón de captura fija de la cámara web

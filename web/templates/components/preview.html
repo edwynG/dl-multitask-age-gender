@@ -4,6 +4,11 @@
     <img alt="Muestra facial para análisis" class="w-full h-full object-cover transition-opacity duration-200" id="face-preview" src="{{ url_for('static', filename='img/sample2.jpg') }}">
     <video class="w-full h-full object-cover hidden" id="webcam-video" autoplay playsinline muted></video>
 
+    <!-- Botón circular flotante para voltear cámara en la esquina inferior izquierda -->
+    <button id="btn-flip-floating" class="hidden absolute bottom-3 left-3 w-10 h-10 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface border border-outline-variant/60 shadow-md active:scale-90 transition-all flex items-center justify-center z-20 hover:bg-surface-container-lowest cursor-pointer" title="Voltear cámara (Frontal / Trasera)" type="button">
+      <img src="{{ url_for('static', filename='icons/cameraswitch.svg') }}" alt="Voltear cámara" class="w-5 h-5 shrink-0">
+    </button>
+
     <!-- Indicador de cámara activa -->
     <div class="hidden absolute top-3 right-3 px-2.5 py-1 rounded-full bg-emerald-700/90 text-white text-[11px] font-mono-tag flex items-center gap-1.5 shadow-sm" id="live-indicator">
       <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
