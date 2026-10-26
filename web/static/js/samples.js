@@ -1,15 +1,15 @@
 /**
  * Muestras predeterminadas tomadas directamente del subconjunto de prueba (UTKFace).
- * Cada muestra incluye su ruta de imagen estática y la etiqueta real de referencia (Ground Truth).
+ * Orden solicitado: Muestra 1 (Bebé), Muestra 2 (Adulto), Muestra 3 (Anciano).
  */
 export const SAMPLES = {
   "1": {
-    img: "/static/img/sample1.jpg",
-    truth: "Referencia: Femenino - 26 años",
-  },
-  "2": {
     img: "/static/img/sample2.jpg",
     truth: "Referencia: Masculino - 1 año",
+  },
+  "2": {
+    img: "/static/img/sample1.jpg",
+    truth: "Referencia: Femenino - 26 años",
   },
   "3": {
     img: "/static/img/sample3.jpg",

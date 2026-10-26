@@ -1,281 +1,83 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Encabezado introductorio conciso -->
-<section class="max-w-3xl space-y-3">
-  <div class="inline-flex items-center gap-2 text-xs font-mono-tag text-primary font-medium">
-    <span>Evaluación experimental</span>
-    <span class="text-outline-variant">/</span>
-    <span>Comparativa de arquitecturas</span>
+<!-- Encabezado introductorio conciso adaptado a main -->
+<section class="w-full space-y-2 sm:space-y-3">
+  <div class="flex items-center gap-1.5 text-[9px] min-[380px]:text-[10px] sm:text-xs font-mono-tag text-primary font-medium whitespace-nowrap overflow-x-auto no-scrollbar">
+    <span class="shrink-0">Evaluación experimental</span>
+    <span class="text-outline-variant shrink-0">/</span>
+    <span class="shrink-0">Comparativa de arquitecturas</span>
   </div>
-  <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-on-surface leading-tight">
+  <h1 class="text-2xl sm:text-4xl font-semibold tracking-tight text-on-surface leading-tight">
     Estimación simultánea de edad y género facial
   </h1>
-  <p class="text-sm sm:text-base text-on-surface-variant font-normal leading-relaxed">
+  <p class="text-xs sm:text-base text-on-surface-variant font-normal leading-relaxed">
     Comprobación práctica entre dos modelos especializados frente a una red multitarea unificada. Evalúa predicciones en tiempo real a partir de imágenes de prueba o cámara web.
   </p>
 </section>
 
 <!-- Sección principal: Inferencia en vivo y comparación -->
-<section class="space-y-5">
-  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2 pb-2 border-b border-outline-variant/40">
+<section class="space-y-4 sm:space-y-5">
+  <div class="flex items-center justify-between gap-2 pb-2 border-b border-outline-variant/40">
     <div>
-      <h2 class="text-xl sm:text-2xl font-semibold text-on-surface">Inferencia facial interactiva</h2>
-      <p class="text-xs text-on-surface-variant mt-0.5">Captura en vivo o carga de imagen para contrastar los 3 modelos</p>
+      <h2 class="text-lg sm:text-2xl font-semibold text-on-surface">Inferencia facial interactiva</h2>
+      <p class="text-[11px] sm:text-xs text-on-surface-variant mt-0.5">Captura en vivo o carga de imagen para contrastar los 3 modelos</p>
     </div>
-    <span class="text-xs font-mono-tag text-on-surface-variant">Entrada normalizada a 200×200</span>
+    <span class="text-[11px] sm:text-xs font-mono-tag px-2 py-0.5 rounded bg-surface-container text-on-surface-variant shrink-0">200×200 px</span>
   </div>
 
   <!-- Tarjeta unificada del experimento -->
-  <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/50 p-6 md:p-7 shadow-[0_2px_16px_rgba(28,26,25,0.03)] space-y-6">
-    <!-- Controles de captura y muestras a ancho completo -->
-    <div class="flex flex-wrap items-center justify-between gap-4 pb-5 border-b border-outline-variant/30">
-      <div class="flex flex-wrap items-center gap-2.5">
-        <button class="px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface" id="btn-webcam">
+  <div class="bg-surface-container-lowest rounded-2xl border border-outline-variant/50 p-4 sm:p-6 md:p-7 shadow-[0_2px_16px_rgba(28,26,25,0.03)] space-y-5 sm:space-y-6">
+    <!-- Controles de captura y muestras adaptados para mobile y desktop -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 pb-4 sm:pb-5 border-b border-outline-variant/30">
+      <!-- Acciones de captura con altura calibrada -->
+      <div class="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-2.5 w-full sm:w-auto">
+        <button class="h-9 sm:h-10 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface active:scale-95 shadow-sm" id="btn-webcam">
           <img src="{{ url_for('static', filename='icons/videocam.svg') }}" alt="Cámara web" class="w-4 h-4 shrink-0" id="cam-icon">
-          <span id="cam-status">Activar cámara web</span>
+          <span id="cam-status">Activar cámara</span>
         </button>
-        <button class="hidden px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-primary hover:bg-primary/90 text-on-primary shadow-sm active:scale-95" id="btn-capture-snapshot" type="button">
+        <button class="hidden h-9 sm:h-10 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-on-primary shadow-sm active:scale-95" id="btn-capture-snapshot" type="button">
           <img src="{{ url_for('static', filename='icons/photo_camera.svg') }}" alt="Capturar foto" class="w-4 h-4 shrink-0 brightness-0 invert">
           <span>Tomar foto</span>
         </button>
-        <label class="px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface cursor-pointer">
+        <label class="h-9 sm:h-10 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface cursor-pointer active:scale-95 shadow-sm" id="label-file-input">
           <img src="{{ url_for('static', filename='icons/photo_camera.svg') }}" alt="Subir foto" class="w-4 h-4 shrink-0">
           <span>Subir foto</span>
           <input accept="image/*" class="hidden" id="file-input" type="file">
         </label>
       </div>
 
-      <!-- Muestras predeterminadas -->
-      <div class="flex items-center gap-2">
-        <span class="text-xs text-on-surface-variant">Muestras de prueba:</span>
-        <div class="flex gap-1.5" id="sample-triggers">
-          <button class="sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-primary/10 text-primary font-medium border border-primary/20" data-sample="1">Muestra 1 (Adulto)</button>
-          <button class="sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-sample="2">Muestra 2 (Bebé)</button>
-          <button class="sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high" data-sample="3">Muestra 3 (Anciano)</button>
+      <!-- Muestras predeterminadas (Bebé, Adulto, Anciano) en una sola línea -->
+      <div class="flex flex-col sm:flex-row sm:items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
+        <span class="text-xs text-on-surface-variant font-medium text-left sm:text-right">Muestras de prueba:</span>
+        <div class="grid grid-cols-3 sm:flex gap-1.5 w-full sm:w-auto" id="sample-triggers">
+          <button class="sample-btn h-7 sm:h-8 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-primary/10 text-primary font-medium border border-primary/20 text-center flex items-center justify-center whitespace-nowrap" data-sample="1">
+            <span class="sm:hidden">1. Bebé</span>
+            <span class="hidden sm:inline">Muestra 1 (Bebé)</span>
+          </button>
+          <button class="sample-btn h-7 sm:h-8 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-center flex items-center justify-center whitespace-nowrap" data-sample="2">
+            <span class="sm:hidden">2. Adulto</span>
+            <span class="hidden sm:inline">Muestra 2 (Adulto)</span>
+          </button>
+          <button class="sample-btn h-7 sm:h-8 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-center flex items-center justify-center whitespace-nowrap" data-sample="3">
+            <span class="sm:hidden">3. Anciano</span>
+            <span class="hidden sm:inline">Muestra 3 (Anciano)</span>
+          </button>
         </div>
       </div>
     </div>
 
     <!-- Área visual: Visor de imagen y resultados comparativos -->
-    <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
-      <!-- Visor de la muestra (5 columnas) -->
-      <div class="lg:col-span-5 space-y-3">
-        <div class="relative rounded-xl overflow-hidden bg-surface-container border border-outline-variant/40 aspect-square flex items-center justify-center">
-          <img alt="Muestra facial para análisis" class="w-full h-full object-cover transition-opacity duration-200" id="face-preview" src="{{ url_for('static', filename='img/sample1.jpg') }}">
-          <video class="w-full h-full object-cover hidden" id="webcam-video" autoplay playsinline muted></video>
-
-          <!-- Indicador de cámara activa -->
-          <div class="hidden absolute top-3 right-3 px-2.5 py-1 rounded-full bg-emerald-700/90 text-white text-[11px] font-mono-tag flex items-center gap-1.5 shadow-sm" id="live-indicator">
-            <span class="w-1.5 h-1.5 rounded-full bg-white animate-pulse"></span>
-            <span>Transmisión activa</span>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-between text-xs font-mono-tag text-on-surface-variant px-0.5">
-          <span id="label-ground-truth">Referencia: Femenino - 26 años</span>
-          <span class="text-on-surface-variant font-mono-tag" id="preview-dimensions">200×200 px</span>
-        </div>
-      </div>
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-7 items-start">
+      <!-- Visor de la muestra facial (5 columnas) -->
+      {% include "components/preview.html" %}
 
       <!-- Comparación estructurada de los 3 modelos (7 columnas) -->
-      <div class="lg:col-span-7 space-y-4">
-        <!-- Modelo multitarea (Destacado prioritario) -->
-        <div class="p-5 rounded-xl bg-surface-container-low border border-primary/30 space-y-3 relative">
-          <div class="flex items-start justify-between">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-primary"></span>
-                <span class="text-xs font-semibold text-primary">Modelo multitarea</span>
-              </div>
-              <h3 class="text-base font-semibold text-on-surface mt-0.5">Red multitarea (edad y género simultáneos)</h3>
-            </div>
-            <div class="text-right">
-              <span class="font-mono-tag text-sm font-semibold text-primary" id="res-c-lat">—</span>
-              <span class="block text-[11px] font-mono-tag text-emerald-700" id="res-c-savings">Midiendo ahorro...</span>
-            </div>
-          </div>
-
-          <!-- Predicciones dobles -->
-          <div class="grid grid-cols-2 gap-3 pt-1">
-            <div class="p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30">
-              <span class="block text-[11px] font-mono-tag text-on-surface-variant">Género predicho</span>
-              <span class="text-sm sm:text-base font-semibold text-on-surface" id="res-c-gender">Calculando...</span>
-            </div>
-            <div class="p-3 rounded-lg bg-surface-container-lowest border border-outline-variant/30">
-              <span class="block text-[11px] font-mono-tag text-on-surface-variant">Edad estimada</span>
-              <span class="text-sm sm:text-base font-semibold text-on-surface" id="res-c-age">Calculando...</span>
-            </div>
-          </div>
-
-          <p class="text-xs text-on-surface-variant pt-0.5">
-            Extrae descriptores compartidos para clasificar género y predecir edad en una única pasada, reduciendo la latencia y la memoria requerida.
-          </p>
-        </div>
-
-        <!-- Modelo especialista de género -->
-        <div class="p-4 rounded-xl bg-surface-container/60 border border-outline-variant/40 space-y-2">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-xs font-medium text-secondary">Especialista individual</span>
-              <h3 class="text-sm font-semibold text-on-surface">Modelo de género (clasificación binaria)</h3>
-            </div>
-            <div class="text-right">
-              <span class="font-mono-tag text-xs font-semibold text-on-surface" id="res-a-lat">—</span>
-              <span class="block text-[10px] text-on-surface-variant">Sólo género</span>
-            </div>
-          </div>
-          <div class="flex items-center justify-between pt-1">
-            <span class="text-xs text-on-surface-variant">Predicción binaria con probabilidad:</span>
-            <span class="font-mono-tag text-xs font-semibold text-on-surface" id="res-a-gender">Calculando...</span>
-          </div>
-        </div>
-
-        <!-- Modelo especialista de edad -->
-        <div class="p-4 rounded-xl bg-surface-container/60 border border-outline-variant/40 space-y-2">
-          <div class="flex items-center justify-between">
-            <div>
-              <span class="text-xs font-medium text-secondary">Especialista individual</span>
-              <h3 class="text-sm font-semibold text-on-surface">Modelo de edad (regresión continua)</h3>
-            </div>
-            <div class="text-right">
-              <span class="font-mono-tag text-xs font-semibold text-on-surface" id="res-b-lat">—</span>
-              <span class="block text-[10px] text-on-surface-variant">Sólo edad</span>
-            </div>
-          </div>
-          <div class="flex items-center justify-between pt-1">
-            <span class="text-xs text-on-surface-variant">Estimación continua de edad:</span>
-            <span class="font-mono-tag text-xs font-semibold text-on-surface" id="res-b-age">Calculando...</span>
-          </div>
-        </div>
-
-        <!-- Comparativo de tiempo acumulado -->
-        <div class="px-4 py-2.5 rounded-lg bg-surface-container-low text-xs font-mono-tag text-on-surface-variant flex items-center justify-between border border-outline-variant/30">
-          <span>Ejecución acumulada de ambos modelos dedicados:</span>
-          <span class="font-semibold text-on-surface" id="res-combined-lat">Calculando latencia acumulada...</span>
-        </div>
-      </div>
+      {% include "components/comparison_cards.html" %}
     </div>
   </div>
 </section>
 
 <!-- Resumen conciso de métricas reales -->
-<section class="space-y-4">
-  <div class="space-y-1">
-    <h2 class="text-xl sm:text-2xl font-semibold text-on-surface">Resumen comparativo de métricas</h2>
-    <p class="text-xs sm:text-sm text-on-surface-variant">Métricas consolidadas sobre el conjunto de prueba para evaluar exactitud, error medio y consumo.</p>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
-    <!-- Tarjeta 1: Especialista género -->
-    <div class="p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/40 space-y-4">
-      <div>
-        <span class="text-xs font-medium text-secondary">Especialista 01</span>
-        <h3 class="text-base font-semibold text-on-surface mt-0.5">Modelo de género</h3>
-        <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
-          Optimizado exclusivamente para categorización binaria (femenino o masculino).
-        </p>
-      </div>
-      <div class="space-y-2.5 pt-3 border-t border-outline-variant/30 text-xs font-mono-tag">
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Exactitud (test)</span>
-          <span class="text-on-surface font-semibold text-sm">88.7%</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Predicción actual</span>
-          <span class="text-on-surface font-semibold text-sm text-right" id="metric-gen-pred">Calculando...</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Tiempo de inferencia</span>
-          <span class="text-on-surface font-semibold text-right" id="metric-gen-lat">—</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Tamaño en disco</span>
-          <span class="text-on-surface text-right" id="metric-gen-size">{{ models_info.gender.size_str if models_info else '4.6 MB' }}</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Parámetros</span>
-          <span class="text-on-surface text-right" id="metric-gen-params">{{ models_info.gender.params_str if models_info else '1,206,497' }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tarjeta 2: Especialista edad -->
-    <div class="p-5 rounded-xl bg-surface-container-lowest border border-outline-variant/40 space-y-4">
-      <div>
-        <span class="text-xs font-medium text-secondary">Especialista 02</span>
-        <h3 class="text-base font-semibold text-on-surface mt-0.5">Modelo de edad</h3>
-        <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
-          Entrenado para regresión continua mediante función de pérdida Huber.
-        </p>
-      </div>
-      <div class="space-y-2.5 pt-3 border-t border-outline-variant/30 text-xs font-mono-tag">
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">MAE edad (test)</span>
-          <span class="text-on-surface font-semibold text-sm">6.92 años</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Estimación actual</span>
-          <span class="text-on-surface font-semibold text-sm text-right" id="metric-age-pred">Calculando...</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Tiempo de inferencia</span>
-          <span class="text-on-surface font-semibold text-right" id="metric-age-lat">—</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Tamaño en disco</span>
-          <span class="text-on-surface text-right" id="metric-age-size">{{ models_info.age.size_str if models_info else '4.6 MB' }}</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Parámetros</span>
-          <span class="text-on-surface text-right" id="metric-age-params">{{ models_info.age.params_str if models_info else '1,206,497' }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Tarjeta 3: Multitarea unificado -->
-    <div class="p-5 rounded-xl bg-surface-container-low border border-primary/35 space-y-4">
-      <div>
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-semibold text-primary">Arquitectura unificada</span>
-          <span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
-        </div>
-        <h3 class="text-base font-semibold text-on-surface mt-0.5">Modelo multitarea</h3>
-        <p class="text-xs text-on-surface-variant mt-1 leading-relaxed">
-          Cabezales compartidos para predicción simultánea en un único pase.
-        </p>
-      </div>
-      <div class="space-y-2.5 pt-3 border-t border-outline-variant/30 text-xs font-mono-tag">
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Exactitud género (test)</span>
-          <span class="text-primary font-semibold text-sm">89.5%</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">MAE edad (test)</span>
-          <span class="text-primary font-semibold text-sm">8.73 años</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Género actual</span>
-          <span class="text-primary font-semibold text-sm text-right" id="metric-multi-gender">Calculando...</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Edad actual</span>
-          <span class="text-primary font-semibold text-sm text-right" id="metric-multi-age">Calculando...</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Tiempo de inferencia</span>
-          <span class="text-primary font-semibold text-right" id="metric-multi-lat">—</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Tamaño en disco</span>
-          <span class="text-primary font-semibold text-right" id="metric-multi-size">{{ models_info.multitask.size_str if models_info else '4.8 MB' }}</span>
-        </div>
-        <div class="flex justify-between items-center gap-3">
-          <span class="text-on-surface-variant shrink-0">Parámetros</span>
-          <span class="text-primary font-semibold text-right" id="metric-multi-params">{{ models_info.multitask.params_str if models_info else '1,239,778' }}</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
+{% include "components/metrics_summary.html" %}
 {% endblock %}

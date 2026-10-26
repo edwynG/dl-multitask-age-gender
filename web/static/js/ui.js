@@ -15,6 +15,7 @@ export const dom = {
   // Controles e interacción
   sampleBtns: document.querySelectorAll(".sample-btn"),
   fileInput: document.getElementById("file-input"),
+  labelFileInput: document.getElementById("label-file-input"),
   btnWebcam: document.getElementById("btn-webcam"),
   camStatus: document.getElementById("cam-status"),
   camIcon: document.getElementById("cam-icon"),
@@ -79,8 +80,8 @@ export function highlightSampleButton(activeKey) {
   dom.sampleBtns.forEach((btn) => {
     const isSelected = btn.getAttribute("data-sample") === activeKey;
     btn.className = isSelected
-      ? "sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-primary/10 text-primary font-medium border border-primary/20"
-      : "sample-btn px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high";
+      ? "sample-btn h-7 sm:h-8 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-primary/10 text-primary font-medium border border-primary/20 text-center flex items-center justify-center whitespace-nowrap"
+      : "sample-btn h-7 sm:h-8 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-center flex items-center justify-center whitespace-nowrap";
   });
 }
 
@@ -97,7 +98,7 @@ export function setLoadingState() {
   if (dom.resCAge) dom.resCAge.textContent = "Calculando...";
   if (dom.resCLat) dom.resCLat.textContent = "—";
   if (dom.resCSavings) dom.resCSavings.textContent = "Midiendo ahorro...";
-  if (dom.resCombinedLat) dom.resCombinedLat.textContent = "Calculando latencia acumulada...";
+  if (dom.resCombinedLat) dom.resCombinedLat.textContent = "Calculando...";
 
   // Resumen corporativo inferior
   if (dom.metricGenPred) dom.metricGenPred.textContent = "Calculando...";
@@ -139,10 +140,10 @@ export function renderModelOutputs(data) {
   // 4. Ahorro de latencia y latencia combinada
   if (dom.resCSavings) {
     const sign = data.multitask.savings_pct >= 0 ? "−" : "+";
-    dom.resCSavings.textContent = `${sign}${Math.abs(data.multitask.savings_pct)}% tiempo vs en serie`;
+    dom.resCSavings.textContent = `${sign}${Math.abs(data.multitask.savings_pct)}% vs serie`;
   }
   if (dom.resCombinedLat) {
-    dom.resCombinedLat.textContent = `${data.combined_specialist_latency_ms} ms de latencia combinada`;
+    dom.resCombinedLat.textContent = `${data.combined_specialist_latency_ms} ms combinados`;
   }
 
   // 5. Dimensiones reales informadas por el backend

@@ -116,12 +116,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (dom.video) dom.video.classList.add("hidden");
     if (dom.liveIndicator) dom.liveIndicator.classList.add("hidden");
     if (dom.btnSnapshot) dom.btnSnapshot.classList.add("hidden");
+    if (dom.labelFileInput) {
+      dom.labelFileInput.classList.remove("hidden", "sm:flex");
+    }
 
     if (dom.btnWebcam) {
       dom.btnWebcam.className =
-        "px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface";
+        "h-9 sm:h-10 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 bg-surface-container hover:bg-surface-container-high text-on-surface active:scale-95 shadow-sm";
     }
-    if (dom.camStatus) dom.camStatus.textContent = "Activar cámara web";
+    if (dom.camStatus) dom.camStatus.textContent = "Activar cámara";
     if (dom.camIcon) dom.camIcon.src = "/static/icons/videocam.svg";
   }
 
@@ -138,11 +141,18 @@ document.addEventListener("DOMContentLoaded", () => {
       }
       if (dom.preview) dom.preview.classList.add("hidden");
       if (dom.liveIndicator) dom.liveIndicator.classList.remove("hidden");
-      if (dom.btnSnapshot) dom.btnSnapshot.classList.remove("hidden");
+      if (dom.btnSnapshot) {
+        dom.btnSnapshot.className =
+          "h-9 sm:h-10 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-on-primary shadow-sm active:scale-95";
+        dom.btnSnapshot.classList.remove("hidden");
+      }
+      if (dom.labelFileInput) {
+        dom.labelFileInput.classList.add("hidden", "sm:flex");
+      }
 
       if (dom.btnWebcam) {
         dom.btnWebcam.className =
-          "px-3.5 py-2 rounded-xl text-xs font-medium transition-all flex items-center gap-2 bg-primary text-on-primary";
+          "h-9 sm:h-10 px-3.5 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition-all flex items-center justify-center gap-2 bg-surface-container-high hover:bg-surface-container-highest text-on-surface border border-outline-variant/60 active:scale-95 shadow-sm";
       }
       if (dom.camStatus) dom.camStatus.textContent = "Detener cámara";
       if (dom.camIcon) dom.camIcon.src = "/static/icons/videocam_off.svg";

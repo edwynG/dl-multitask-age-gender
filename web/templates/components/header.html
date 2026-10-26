@@ -1,33 +1,32 @@
-<!-- Barra de navegación superior y monitor de estado de modelos -->
-<header class="border-b border-outline-variant/60 bg-surface/90 backdrop-blur-md sticky top-0 z-30 pt-safe">
-  <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 sm:h-18 py-3 flex items-center justify-between gap-4">
-    <!-- Logotipo y título del laboratorio -->
-    <div class="flex items-center gap-3">
-      <div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary border border-primary/20 shrink-0">
-        <!-- Icono vectorial SVG propio para cerebro y red neuronal -->
-        <img src="{{ url_for('static', filename='icons/psychology.svg') }}" alt="Cerebro neuronal" class="w-5 h-5">
+<!-- Barra de navegación superior idéntica al mockup -->
+<header class="border-b border-outline-variant/60 bg-surface/90 backdrop-blur-md sticky top-0 z-30">
+  <div class="app-container w-full max-w-[1200px] mx-auto px-4 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-3">
+    <div class="flex items-center gap-2.5 sm:gap-3.5">
+      <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-primary/10 flex items-center justify-center border border-primary/20 shrink-0">
+        <img src="{{ url_for('static', filename='icons/psychology.svg') }}" alt="Cerebro neuronal" class="w-4 h-4 sm:w-5 sm:h-5">
       </div>
-      <div class="min-w-0">
-        <div class="flex items-center gap-2">
-          <span class="text-sm sm:text-base font-semibold tracking-tight text-on-surface truncate">Multitask face lab</span>
-          <span class="text-[11px] font-mono-tag px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-medium shrink-0">UCV</span>
+      <div>
+        <div class="flex items-center gap-1.5 sm:gap-2">
+          <span class="text-sm sm:text-base font-semibold tracking-tight text-on-surface">Multitask face lab</span>
+          <span class="text-[10px] sm:text-[11px] font-mono-tag px-1.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant">UCV</span>
         </div>
-        <p class="text-[11px] sm:text-xs text-on-surface-variant font-normal hidden sm:block">Investigación en redes neuronales profundas</p>
+        <p class="hidden sm:block text-xs text-on-surface-variant font-normal">Investigación en redes neuronales profundas</p>
+        <div class="flex sm:hidden items-center gap-1 text-[11px] text-on-surface-variant font-mono-tag">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+          <span>Modelos en memoria</span>
+        </div>
       </div>
     </div>
 
-    <!-- Indicador de estado y botón para recarga de checkpoints -->
+    <!-- Estado de carga automática y botón para recargar modelos con misma altura exacta -->
     <div class="flex items-center gap-2 sm:gap-3 shrink-0">
-      <div class="flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant/50 text-xs font-mono-tag text-on-surface-variant" id="model-status-indicator">
-        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0" id="status-pulse"></span>
-        <span id="status-text" class="hidden sm:inline">Modelos cargados automáticamente en memoria</span>
-        <span class="sm:hidden">En memoria</span>
+      <div class="hidden sm:flex h-8 sm:h-8.5 items-center gap-2 px-3 py-1.5 rounded-lg bg-surface-container-low border border-outline-variant/50 text-xs font-mono-tag text-on-surface-variant" id="model-status-indicator">
+        <span class="w-2 h-2 rounded-full bg-emerald-600 animate-pulse shrink-0"></span>
+        <span id="status-text">Modelos cargados automáticamente en memoria</span>
       </div>
-      <button class="px-2.5 sm:px-3.5 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low hover:bg-surface-container border border-outline-variant/70 text-on-surface transition-all flex items-center gap-1.5 shadow-sm active:scale-95" id="btn-reload-models" title="Vuelve a cargar los modelos en memoria">
-        <!-- Icono vectorial SVG para recarga -->
-        <img src="{{ url_for('static', filename='icons/refresh.svg') }}" alt="Recargar" class="w-3.5 h-3.5" id="icon-reload">
-        <span class="hidden sm:inline">Volver a cargar modelos</span>
-        <span class="sm:hidden">Recargar</span>
+      <button class="h-8 sm:h-8.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-surface-container-low hover:bg-surface-container border border-outline-variant/70 text-on-surface transition-all flex items-center justify-center gap-1.5 active:scale-95 shrink-0" id="btn-reload-models" title="Vuelve a cargar los modelos en memoria">
+        <img src="{{ url_for('static', filename='icons/refresh.svg') }}" alt="Recargar modelos" class="w-3.5 h-3.5 transition-transform shrink-0" id="icon-reload">
+        <span><span class="sm:hidden">Recargar</span><span class="hidden sm:inline">Volver a cargar modelos</span></span>
       </button>
     </div>
   </div>
