@@ -1,7 +1,6 @@
-# Entorno para multitask_learning_age_gender.ipynb
-# PyTorch con aceleración CUDA (instalar vía index-url si se requiere GPU):
-# pip install torch torchvision --index-url https://download.pytorch.org/whl/cu124
-
+--extra-index-url https://download.pytorch.org/whl/cu124
+torch
+torchvision
 ipykernel
 jupyter
 kagglehub
