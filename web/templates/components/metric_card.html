@@ -47,14 +47,16 @@
 
   <div class="space-y-2 pt-2.5 border-t border-outline-variant/30 text-[11px] sm:text-xs font-mono-tag">
     {# Métricas de prueba consolidadas #}
+    {% if metrics %}
     {% for label, val in metrics %}
     <div class="flex justify-between items-center gap-2">
       <span class="text-on-surface-variant shrink-0">{{ label }}</span>
       <span class="{{ 'text-primary' if is_featured else 'text-on-surface' }} font-semibold text-xs sm:text-sm text-right">
-        {{ val if is_loaded else 'No disponible' }}
+        {{ val if (is_loaded and val) else 'No disponible' }}
       </span>
     </div>
     {% endfor %}
+    {% endif %}
 
     {# Predicciones actuales dinámicas #}
     {% for label, pred_id in preds %}
