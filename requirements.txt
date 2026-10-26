@@ -1,14 +1,25 @@
---extra-index-url https://download.pytorch.org/whl/cu124
+# ==============================================================================
+# Dependencias para despliegue en producción (Render - Web Service)
+# PyTorch versión CPU: Reduce la descarga de 2.5 GB a ~150 MB para respetar
+# los límites de memoria RAM (512 MB) y almacenamiento de Render Free Tier.
+# ==============================================================================
+--extra-index-url https://download.pytorch.org/whl/cpu
 torch
 torchvision
-ipykernel
-jupyter
-kagglehub
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-pillow
-tqdm
 flask
+gunicorn
+pillow
+numpy
+
+# ==============================================================================
+# Dependencias exclusivas para entrenamiento, EDA y Jupyter Notebook
+# (Comentadas para el despliegue en Render, ya que no son requeridas por la web)
+# ==============================================================================
+# ipykernel
+# jupyter
+# kagglehub
+# pandas
+# scikit-learn
+# matplotlib
+# seaborn
+# tqdm

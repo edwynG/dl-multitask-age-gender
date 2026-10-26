@@ -87,5 +87,7 @@ def api_status():
 
 
 if __name__ == "__main__":
-    # ejecutamos el servidor de desarrollo en el puerto 5000
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    # soporte para puerto asignado por Render ($PORT) o 5000 por defecto en local
+    port = int(os.environ.get("PORT", 5000))
+    debug = os.environ.get("FLASK_ENV") == "development"
+    app.run(host="0.0.0.0", port=port, debug=debug)
