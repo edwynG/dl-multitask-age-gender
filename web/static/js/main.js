@@ -235,6 +235,8 @@ document.addEventListener("DOMContentLoaded", () => {
     dom.btnReload.addEventListener("click", reloadModels);
   }
 
-  // Inicialización: cargar la Muestra 1 al arrancar la aplicación
-  applySample("1");
+  // Inicialización: cargar la Muestra 1 con un breve retardo para permitir la carga fluida de la interfaz
+  setTimeout(() => {
+    applySample("1");
+  }, 400);
 });

@@ -3,8 +3,8 @@ import io
 import time
 import base64
 from PIL import Image
+import numpy as np
 import torch
-from torchvision import transforms
 
 from web.config import (
     AGE_MODEL_PATH,
@@ -33,12 +33,9 @@ class ModelInferenceService:
             "device": str(self.device),
         }
 
-        # pipeline de transformación de imágenes para la red
-        self.transform = transforms.Compose([
-            transforms.Resize(IMAGE_SIZE),
-            transforms.ToTensor(),
-            transforms.Normalize(mean=NORM_MEAN, std=NORM_STD),
-        ])
+        # tensores de normalización precalculados para evitar la pesada sobrecarga de torchvision
+        self.norm_mean = torch.tensor(NORM_MEAN, dtype=torch.float32, device=self.device).view(1, 3, 1, 1)
+        self.norm_std = torch.tensor(NORM_STD, dtype=torch.float32, device=self.device).view(1, 3, 1, 1)
 
         # cargamos los modelos al inicializar el servicio
         self.load_models()
@@ -80,17 +77,17 @@ class ModelInferenceService:
         }
         self.status["models_info"] = self.models_info
 
-        # warm-up de gpu para que la primera inferencia no absorba la inicialización de cuda
-        try:
-            dummy = torch.zeros(1, 3, *IMAGE_SIZE, device=self.device)
-            with torch.no_grad():
-                self.model_gender(dummy)
-                self.model_age(dummy)
-                self.model_multitask(dummy)
-                if self.device.type == "cuda":
+        # warm-up exclusivo para gpu para evitar penalizaciones de cpu en entornos restringidos
+        if self.device.type == "cuda":
+            try:
+                dummy = torch.zeros(1, 3, *IMAGE_SIZE, device=self.device)
+                with torch.no_grad():
+                    self.model_gender(dummy)
+                    self.model_age(dummy)
+                    self.model_multitask(dummy)
                     torch.cuda.synchronize(self.device)
-        except Exception:
-            pass
+            except Exception:
+                pass
 
         return self.status
 
@@ -132,8 +129,11 @@ class ModelInferenceService:
 
         orig_size = pil_img.size  # (ancho, alto) real de la imagen
 
-        # aplicamos las transformaciones y agregamos la dimensión de lote [1, 3, H, W]
-        tensor = self.transform(pil_img).unsqueeze(0).to(self.device)
+        # redimensionamos e ingresamos el tensor normalizado [1, 3, H, W]
+        resized = pil_img.resize(IMAGE_SIZE, Image.BILINEAR)
+        arr = np.array(resized, dtype=np.float32) / 255.0
+        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0).to(self.device)
+        tensor = (tensor - self.norm_mean) / self.norm_std
         return tensor, orig_size
 
     def predict(self, image_input):

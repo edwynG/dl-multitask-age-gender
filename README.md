@@ -51,18 +51,41 @@ dl-multitask-age-gender/
 
 ## Ejecución del proyecto
 
-> [!TIP]
-> El archivo `requirements.txt` incluye el parámetro `--extra-index-url` apuntando al repositorio oficial de PyTorch con soporte para NVIDIA CUDA 12.4. Esto permite aprovechar aceleración por GPU de forma automática en equipos compatibles (como una RTX 3050), y se degrada a CPU si el entorno no cuenta con GPU dedicada.
-
-1. Crear y activar el entorno virtual con Python 3.12:
+### 1. Preparación del entorno virtual
+Crear y activar el entorno virtual con Python 3.12:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
 ```
 
-2. Instalar las dependencias del proyecto:
+Instalar las dependencias:
 ```bash
 pip install -r requirements.txt
 ```
 
-3. Abrir el notebook `multitask_learning_age_gender.ipynb` seleccionando el kernel del entorno virtual (`.venv` o `Python (DL Proyecto)`).
+> [!NOTE]
+> **Optimización de dependencias (`requirements.txt`):**
+> * **Para la aplicación web / despliegue en Render:** El archivo instala únicamente el conjunto mínimo necesario para inferencia (`torch`, `flask`, `gunicorn`, `pillow`, `numpy`). Las librerías pesadas de análisis y entrenamiento (`pandas`, `matplotlib`, `seaborn`, `jupyter`, `torchvision`) están comentadas para evitar sobrepasar los 512 MB de RAM de Render y acelerar los tiempos de despliegue. **Esto no afecta en absoluto la precisión ni el rendimiento de los modelos en producción.**
+> * **Para reentrenar el notebook:** Si deseas reejecutar el pipeline completo de entrenamiento y EDA desde cero, descomenta e instala las dependencias de la sección inferior de `requirements.txt`.
+
+---
+
+### 2. Ejecutar la aplicación web interactiva en local
+Para iniciar el servidor web de desarrollo y evaluar los modelos en tiempo real con muestras, fotos propias o cámara web:
+```bash
+python -m web.app
+# O alternativamente:
+python web/app.py
+```
+Luego abre tu navegador en:
+```text
+http://127.0.0.1:5000
+```
+
+---
+
+### 3. Ejecutar el Notebook de investigación
+Para explorar el análisis exploratorio de datos (EDA), deducción de funciones de pérdida y entrenamiento experimental:
+1. Abrir `multitask_learning_age_gender.ipynb` en VS Code, JupyterLab o Google Colab.
+2. Seleccionar el kernel del entorno virtual (`.venv`).
+3. Ejecutar secuencialmente las celdas del informe.

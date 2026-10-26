@@ -1,6 +1,14 @@
 import os
 import torch
 
+# limitamos hilos en cpu exclusivamente en producción (Render) para evitar contención de hilos
+if os.environ.get("RENDER"):
+    torch.set_num_threads(1)
+    try:
+        torch.set_num_interop_threads(1)
+    except Exception:
+        pass
+
 # directorio base del proyecto y subcarpetas
 BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 MODELS_DIR = os.path.join(BASE_DIR, "models")

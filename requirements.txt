@@ -5,16 +5,20 @@
 # ==============================================================================
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch
-torchvision
 flask
 gunicorn
 pillow
 numpy
 
+
 # ==============================================================================
 # Dependencias exclusivas para entrenamiento, EDA y Jupyter Notebook
 # (Comentadas para el despliegue en Render, ya que no son requeridas por la web)
 # ==============================================================================
+
+# torchvision omitido para ahorrar ~130 MB de RAM y evitar OOM en los 512 MB de Render
+# torchvision
+
 # ipykernel
 # jupyter
 # kagglehub
