@@ -32,6 +32,8 @@ El modelo ganador se encuentra publicado y disponible en la plataforma Hugging F
 ## Enlaces del proyecto
 
 * **Presentación del proyecto (PDF):** [docs/presentation/presentation.pdf](docs/presentation/presentation.pdf)
+* **Notebook principal (Clasificación de género con Vision Transformer):** [notebook/vit_gender_transfer_learning.ipynb](notebook/vit_gender_transfer_learning.ipynb)
+* **Notebook extra (Estimación conjunta de edad y género con MTL):** [notebook/extra/multitask_learning_age_gender.ipynb](notebook/extra/multitask_learning_age_gender.ipynb)
 * **Modelo afinado en el Hub:** [miguelciav/vit-base-utkface-gender](https://huggingface.co/miguelciav/vit-base-utkface-gender)
 * **Modelo base preentrenado:** [google/vit-base-patch16-224](https://huggingface.co/google/vit-base-patch16-224)
 * **Dataset en el Hub:** [nu-delta/utkface](https://huggingface.co/datasets/nu-delta/utkface)
@@ -50,7 +52,9 @@ dl-vit-gender-classification/
 │       ├── presentation.tex                 #   Código fuente modular y configurable
 │       └── figures/                         #   Gráficos del dataset, curvas, matriz y logos
 ├── notebook/
-│   └── vit_gender_transfer_learning.ipynb   # Experimentos en Google Colab
+│   ├── vit_gender_transfer_learning.ipynb   # Experimentos principales en Google Colab
+│   └── extra/                               # Investigación complementaria
+│       └── multitask_learning_age_gender.ipynb #   Cuaderno de investigación extra (MTL)
 ├── api/                                     # Servicio de predicción que carga el modelo
 │   ├── config.py                            #   Lectura de variables de configuración
 │   ├── inference.py                         #   Inferencia con el modelo en memoria
@@ -71,13 +75,24 @@ dl-vit-gender-classification/
 
 ## Regímenes experimentales comparados
 
-En el notebook ([`notebook/vit_gender_transfer_learning.ipynb`](notebook/vit_gender_transfer_learning.ipynb)) se compararon los siguientes regímenes sobre particiones idénticas con semilla fija:
+En el notebook principal ([`notebook/vit_gender_transfer_learning.ipynb`](notebook/vit_gender_transfer_learning.ipynb)) se compararon los siguientes regímenes sobre particiones idénticas con semilla fija:
 
 1. **Baseline desde cero:** ViT con inicialización aleatoria de pesos, sin preentrenamiento.
 2. **Modelo base sin adaptar:** ViT preentrenado evaluado con cabeza lineal aleatoria sin ajustar.
 3. **Feature extraction:** backbone congelado (`requires_grad = False`), optimizando únicamente la cabeza clasificadora.
 4. **Fine-tuning completo:** todas las capas descongeladas con tasa de aprendizaje baja ($2\times 10^{-5}$).
 5. **Experimento adicional (descongelado selectivo):** descongelado progresivo de las últimas capas del encoder de atención, evaluando la eficiencia de parámetros.
+
+
+## Investigación exploratoria complementaria (Multi-Task Learning)
+
+Como parte de una investigación complementaria y exploratoria de interés académico, se desarrolló un cuaderno adicional ubicado en [`notebook/extra/multitask_learning_age_gender.ipynb`](notebook/extra/multitask_learning_age_gender.ipynb) donde se evaluó el enfoque de **Aprendizaje Multitarea (Multi-Task Learning - MTL)** utilizando redes neuronales convolucionales sobre el mismo dataset UTKFace:
+
+* **Objetivo:** Predecir simultáneamente la **edad** (regresión continua bajo pérdida Huber / Smooth $L_1$) y el **género** (clasificación binaria con Binary Cross-Entropy) a partir de un único rostro.
+* **Tronco compartido (*Hard Parameter Sharing*):** Se comparó el desempeño de dos modelos especialistas independientes (uno por tarea) frente a una red con backbone convolucional compartido bifurcado en dos cabezas densas diferenciadas.
+* **Resultados destacados:**
+  * **Eficiencia de parámetros:** El modelo multitarea logró un ahorro del **48,6% en cantidad de parámetros** (1,2 millones frente a los 2,4 millones sumados de ambos especialistas) y resolvió ambas predicciones en una única pasada hacia adelante (*forward pass*).
+  * **Transferencia inductiva positiva:** En clasificación de género, la red multitarea superó al especialista individual (**89,45% vs 88,72% de exactitud**, y **89,42% vs 87,88% en F1-score**), corroborando en la práctica los principios teóricos de Caruana (1997) donde las representaciones compartidas entre tareas correlacionadas actúan como un regularizador implícito.
 
 
 
