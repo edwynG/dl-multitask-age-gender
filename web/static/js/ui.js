@@ -1,6 +1,6 @@
 /**
  * Manejo y actualización de la interfaz de usuario (DOM).
- * Centraliza los selectores y las funciones de renderizado visual.
+ * Especializado para el laboratorio de Clasificación de Género con Vision Transformer.
  */
 
 // Cache central de selectores del DOM
@@ -27,39 +27,17 @@ export const dom = {
   statusPulse: document.getElementById("status-pulse"),
   footerYear: document.getElementById("footer-year"),
 
-  // Tarjeta superior: Especialista de género
-  resAGender: document.getElementById("res-a-gender"),
-  resALat: document.getElementById("res-a-lat"),
+  // Resultados de predicción ViT
+  resGender: document.getElementById("res-gender"),
+  resConfidence: document.getElementById("res-confidence"),
+  resLatency: document.getElementById("res-latency"),
+  resDevice: document.getElementById("res-device"),
 
-  // Tarjeta superior: Especialista de edad
-  resBAge: document.getElementById("res-b-age"),
-  resBLat: document.getElementById("res-b-lat"),
-
-  // Tarjeta superior: Red multitarea unificada
-  resCGender: document.getElementById("res-c-gender"),
-  resCAge: document.getElementById("res-c-age"),
-  resCLat: document.getElementById("res-c-lat"),
-  resCSavings: document.getElementById("res-c-savings"),
-  resCombinedLat: document.getElementById("res-combined-lat"),
-
-  // Resumen comparativo inferior: Modelo de género
-  metricGenPred: document.getElementById("metric-gen-pred"),
-  metricGenLat: document.getElementById("metric-gen-lat"),
-  metricGenSize: document.getElementById("metric-gen-size"),
-  metricGenParams: document.getElementById("metric-gen-params"),
-
-  // Resumen comparativo inferior: Modelo de edad
-  metricAgePred: document.getElementById("metric-age-pred"),
-  metricAgeLat: document.getElementById("metric-age-lat"),
-  metricAgeSize: document.getElementById("metric-age-size"),
-  metricAgeParams: document.getElementById("metric-age-params"),
-
-  // Resumen comparativo inferior: Modelo multitarea
-  metricMultiGender: document.getElementById("metric-multi-gender"),
-  metricMultiAge: document.getElementById("metric-multi-age"),
-  metricMultiLat: document.getElementById("metric-multi-lat"),
-  metricMultiSize: document.getElementById("metric-multi-size"),
-  metricMultiParams: document.getElementById("metric-multi-params"),
+  // Barras de distribución de probabilidades
+  probFemaleBar: document.getElementById("prob-female-bar"),
+  probFemaleVal: document.getElementById("prob-female-val"),
+  probMaleBar: document.getElementById("prob-male-bar"),
+  probMaleVal: document.getElementById("prob-male-val"),
 };
 
 /**
@@ -81,8 +59,8 @@ export function highlightSampleButton(activeKey) {
   dom.sampleBtns.forEach((btn) => {
     const isSelected = btn.getAttribute("data-sample") === activeKey;
     btn.className = isSelected
-      ? "sample-btn h-7 sm:h-8 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-primary/10 text-primary font-medium border border-primary/20 text-center flex items-center justify-center whitespace-nowrap"
-      : "sample-btn h-7 sm:h-8 px-2 sm:px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-center flex items-center justify-center whitespace-nowrap";
+      ? "sample-btn h-8 px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-primary/10 text-primary font-medium border border-primary/20 text-center flex items-center justify-center whitespace-nowrap shrink-0"
+      : "sample-btn h-8 px-2.5 py-1 rounded-lg text-xs font-mono-tag bg-surface-container text-on-surface-variant hover:bg-surface-container-high text-center flex items-center justify-center whitespace-nowrap shrink-0";
   });
 }
 
@@ -90,76 +68,66 @@ export function highlightSampleButton(activeKey) {
  * Coloca los indicadores en estado de carga mientras se ejecuta la inferencia.
  */
 export function setLoadingState() {
-  // Tarjetas de predicción superior
-  if (dom.resAGender) dom.resAGender.textContent = "Calculando...";
-  if (dom.resALat) dom.resALat.textContent = "—";
-  if (dom.resBAge) dom.resBAge.textContent = "Calculando...";
-  if (dom.resBLat) dom.resBLat.textContent = "—";
-  if (dom.resCGender) dom.resCGender.textContent = "Calculando...";
-  if (dom.resCAge) dom.resCAge.textContent = "Calculando...";
-  if (dom.resCLat) dom.resCLat.textContent = "—";
-  if (dom.resCSavings) dom.resCSavings.textContent = "Midiendo ahorro...";
-  if (dom.resCombinedLat) dom.resCombinedLat.textContent = "Calculando...";
-
-  // Resumen corporativo inferior
-  if (dom.metricGenPred) dom.metricGenPred.textContent = "Calculando...";
-  if (dom.metricGenLat) dom.metricGenLat.textContent = "—";
-  if (dom.metricAgePred) dom.metricAgePred.textContent = "Calculando...";
-  if (dom.metricAgeLat) dom.metricAgeLat.textContent = "—";
-  if (dom.metricMultiGender) dom.metricMultiGender.textContent = "Calculando...";
-  if (dom.metricMultiAge) dom.metricMultiAge.textContent = "Calculando...";
-  if (dom.metricMultiLat) dom.metricMultiLat.textContent = "—";
+  if (dom.resGender) dom.resGender.textContent = "Calculando...";
+  if (dom.resConfidence) dom.resConfidence.textContent = "—";
+  if (dom.resLatency) dom.resLatency.textContent = "...";
 }
 
 /**
- * Actualiza todos los valores de las tarjetas y tabla comparativa con la respuesta de la API.
+ * Actualiza los valores de la predicción de género y las barras de probabilidad.
  * @param {Object} data Respuesta devuelta por /api/predict
  */
 export function renderModelOutputs(data) {
   if (!data || !data.success) return;
 
-  // 1. Especialista de género
-  if (dom.resAGender) dom.resAGender.textContent = data.specialist_gender.display;
-  if (dom.resALat) dom.resALat.textContent = `${data.specialist_gender.latency_ms} ms`;
-  if (dom.metricGenPred) dom.metricGenPred.textContent = data.specialist_gender.display;
-  if (dom.metricGenLat) dom.metricGenLat.textContent = `${data.specialist_gender.latency_ms} ms`;
+  // 1. Género predicho y confianza
+  const genero = data.genero || data.clase || "Desconocido";
+  const confianza = data.confianza ? `${data.confianza}%` : "—";
 
-  // 2. Especialista de edad
-  if (dom.resBAge) dom.resBAge.textContent = data.specialist_age.display;
-  if (dom.resBLat) dom.resBLat.textContent = `${data.specialist_age.latency_ms} ms`;
-  if (dom.metricAgePred) dom.metricAgePred.textContent = data.specialist_age.display;
-  if (dom.metricAgeLat) dom.metricAgeLat.textContent = `${data.specialist_age.latency_ms} ms`;
-
-  // 3. Red multitarea unificada
-  if (dom.resCGender) dom.resCGender.textContent = data.multitask.gender_display;
-  if (dom.resCAge) dom.resCAge.textContent = data.multitask.age_display;
-  if (dom.resCLat) dom.resCLat.textContent = `${data.multitask.latency_ms} ms`;
-  if (dom.metricMultiGender) dom.metricMultiGender.textContent = data.multitask.gender_display;
-  if (dom.metricMultiAge) dom.metricMultiAge.textContent = data.multitask.age_display;
-  if (dom.metricMultiLat) dom.metricMultiLat.textContent = `${data.multitask.latency_ms} ms`;
-
-  // 4. Ahorro de latencia y latencia combinada
-  if (dom.resCSavings) {
-    const sign = data.multitask.savings_pct >= 0 ? "−" : "+";
-    dom.resCSavings.textContent = `${sign}${Math.abs(data.multitask.savings_pct)}% vs serie`;
-  }
-  if (dom.resCombinedLat) {
-    dom.resCombinedLat.textContent = `${data.combined_specialist_latency_ms} ms combinados`;
+  if (dom.resGender) {
+    dom.resGender.textContent = genero;
+    // Color dinámico según la clase
+    if (genero.toLowerCase().startsWith("fem")) {
+      dom.resGender.className = "text-2xl sm:text-3xl font-bold text-rose-600 block mt-0.5";
+    } else {
+      dom.resGender.className = "text-2xl sm:text-3xl font-bold text-blue-600 block mt-0.5";
+    }
   }
 
-  // 5. Dimensiones reales informadas por el backend
-  if (data.image_dimensions && dom.dimensions) {
-    dom.dimensions.textContent = data.image_dimensions;
+  if (dom.resConfidence) {
+    dom.resConfidence.textContent = confianza;
   }
 
-  // 6. Información técnica de tamaño y parámetros
-  if (data.models_info) {
-    if (dom.metricGenSize && data.models_info.gender) dom.metricGenSize.textContent = data.models_info.gender.size_str;
-    if (dom.metricGenParams && data.models_info.gender) dom.metricGenParams.textContent = data.models_info.gender.params_str;
-    if (dom.metricAgeSize && data.models_info.age) dom.metricAgeSize.textContent = data.models_info.age.size_str;
-    if (dom.metricAgeParams && data.models_info.age) dom.metricAgeParams.textContent = data.models_info.age.params_str;
-    if (dom.metricMultiSize && data.models_info.multitask) dom.metricMultiSize.textContent = data.models_info.multitask.size_str;
-    if (dom.metricMultiParams && data.models_info.multitask) dom.metricMultiParams.textContent = data.models_info.multitask.params_str;
+  if (dom.resLatency && data.latencia_ms !== undefined) {
+    dom.resLatency.textContent = `${data.latencia_ms} ms`;
+  }
+
+  // 2. Barras de probabilidades
+  const pFemale = data.prob_female !== undefined ? data.prob_female : (data.probabilidades?.Femenino || 0);
+  const pMale = data.prob_male !== undefined ? data.prob_male : (data.probabilidades?.Masculino || 0);
+
+  if (dom.probFemaleBar) {
+    dom.probFemaleBar.style.width = `${pFemale}%`;
+  }
+  if (dom.probFemaleVal) {
+    dom.probFemaleVal.textContent = `${pFemale}%`;
+  }
+
+  if (dom.probMaleBar) {
+    dom.probMaleBar.style.width = `${pMale}%`;
+  }
+  if (dom.probMaleVal) {
+    dom.probMaleVal.textContent = `${pMale}%`;
+  }
+
+  // 3. Dimensiones
+  if (dom.dimensions && data.dimensiones) {
+    dom.dimensions.textContent = data.dimensiones;
+  }
+
+  // 4. Dispositivo
+  if (dom.resDevice && data.dispositivo) {
+    dom.resDevice.textContent = data.dispositivo;
   }
 }
 
@@ -180,7 +148,7 @@ export function setReloadButtonState(isLoading) {
   }
   if (dom.statusText) {
     dom.statusText.textContent = isLoading
-      ? "Recargando checkpoints (.pth)..."
-      : "Modelos cargados automáticamente en memoria";
+      ? "Recargando modelo..."
+      : "Modelo ViT en memoria";
   }
 }

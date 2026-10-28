@@ -1,27 +1,23 @@
 # ==============================================================================
-# Dependencias para despliegue en producción (Render - Web Service)
-# PyTorch versión CPU: Reduce la descarga de 2.5 GB a ~150 MB para respetar
-# los límites de memoria RAM (512 MB) y almacenamiento de Render Free Tier.
+# Dependencias principales del proyecto
+# Compatible con CPU / GPU y servicios cloud (Render / Docker)
 # ==============================================================================
---extra-index-url https://download.pytorch.org/whl/cpu
 torch
 flask
 gunicorn
 pillow
 numpy
-
+transformers
+huggingface_hub
+python-dotenv
+pytest
+requests
 
 # ==============================================================================
-# Dependencias exclusivas para entrenamiento, EDA y Jupyter Notebook
-# (Comentadas para el despliegue en Render, ya que no son requeridas por la web)
+# Dependencias para entrenamiento, EDA y análisis en Notebook (Google Colab / Local)
 # ==============================================================================
-
-# torchvision omitido para ahorrar ~130 MB de RAM y evitar OOM en los 512 MB de Render
-# torchvision
-
-# ipykernel
-# jupyter
-# kagglehub
+# datasets
+# accelerate
 # pandas
 # scikit-learn
 # matplotlib

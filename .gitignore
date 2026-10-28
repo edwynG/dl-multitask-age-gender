@@ -18,10 +18,17 @@ __pycache__/
 *.csv
 *Zone.Identifier
 
-# Model checkpoints y logs
+# Model checkpoints y pesos (descargados dinámicamente desde Hugging Face Hub)
+models/
 *.pt
-
+*.pth
+*.bin
+*.safetensors
 *.onnx
 *.crdownload
 runs/
 logs/
+
+# Variables de entorno y secretos
+.env
+.env.local

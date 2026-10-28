@@ -19,15 +19,15 @@ export const ApiService = {
         };
 
     try {
-      const response = await fetch("/api/predict", options);
+      const response = await fetch("/api/predict/gender", options);
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        console.warn("Error en /api/predict:", response.status, err.error || "");
+        console.warn("Error en /api/predict/gender:", response.status, err.error || "");
         return null;
       }
       return await response.json();
     } catch (err) {
-      console.warn("Servidor Flask local no alcanzable en /api/predict:", err.message);
+      console.warn("Servidor Flask local no alcanzable en /api/predict/gender:", err.message);
       return null;
     }
   },
@@ -53,7 +53,7 @@ export const ApiService = {
    */
   async getStatus() {
     try {
-      const response = await fetch("/api/status");
+      const response = await fetch("/api/health");
       if (!response.ok) return null;
       return await response.json();
     } catch (err) {
