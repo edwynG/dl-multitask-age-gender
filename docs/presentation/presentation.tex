@@ -1,0 +1,446 @@
+\documentclass[aspectratio=43,10pt]{beamer}
+
+% =============================================================================
+% 1. PARÁMETROS Y CONFIGURACIÓN DEL PROYECTO (FÁCILMENTE EDITABLE)
+% =============================================================================
+
+% Metadatos institucionales
+\newcommand{\Universidad}{Universidad Central de Venezuela}
+\newcommand{\Facultad}{Facultad de Ciencias}
+\newcommand{\Escuela}{Escuela de Computación}
+\newcommand{\Materia}{Aprendizaje Profundo}
+\newcommand{\Semestre}{Caracas, semestre 2026}
+\newcommand{\CodigoMateriaPie}{DL-2026 \quad UCV}
+
+% Datos del equipo docente y estudiantil
+\newcommand{\Profesor}{Fernando Crema García}
+\newcommand{\EstudianteUno}{Miguel Ciavato}
+\newcommand{\EstudianteDos}{Edwyn Guzmán}
+\newcommand{\EstudianteTres}{Diego Perdomo}
+
+% Título del proyecto
+\newcommand{\TituloPrincipalLuno}{Clasificación de género facial mediante}
+\newcommand{\TituloPrincipalLdos}{Vision Transformer y transferencia de aprendizaje}
+\newcommand{\TituloPie}{Clasificación de género facial con Vision Transformer}
+
+% Enlaces y repositorio público
+\newcommand{\RepoHuggingFaceUrl}{https://huggingface.co/miguelciav/vit-base-utkface-gender}
+\newcommand{\RepoHuggingFaceTxt}{miguelciav/vit-base-utkface-gender}
+
+% Rutas de figuras y logotipos
+\newcommand{\LogoUCV}{figures/logo_ucv.png}
+\newcommand{\LogoIA}{figures/logo_ia.png}
+\newcommand{\FigDistribucion}{figures/fig_1_cell_19.png}
+\newcommand{\FigMuestras}{figures/fig_2_cell_20.png}
+\newcommand{\FigCurvas}{figures/fig_3_cell_50.png}
+\newcommand{\FigConfusion}{figures/fig_4_cell_53.png}
+\newcommand{\FigErrores}{figures/fig_5_cell_56.png}
+
+% =============================================================================
+% 2. PAQUETES Y COMPATIBILIDAD
+% =============================================================================
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{url}
+
+% =============================================================================
+% 3. TEMA Y PALETA INSTITUCIONAL UCV
+% =============================================================================
+\usetheme{Frankfurt}
+\usecolortheme{whale}
+
+\definecolor{ucvblue}{RGB}{27, 102, 176}        % Azul institucional medio (barra superior y bloques)
+\definecolor{ucvdarkblue}{RGB}{16, 68, 122}      % Azul marino oscuro (centro del pie de página)
+\definecolor{ucvlightblue}{RGB}{205, 225, 245}   % Azul claro institucional (laterales del pie de página)
+\definecolor{ucvblockbg}{RGB}{242, 246, 252}     % Fondo claro para cajas de contenido
+\definecolor{darkgray}{RGB}{35, 40, 45}          % Color de texto legible
+
+\setbeamercolor{palette primary}{bg=ucvdarkblue,fg=white}
+\setbeamercolor{palette secondary}{bg=ucvlightblue,fg=ucvdarkblue}
+\setbeamercolor{palette tertiary}{bg=ucvblue,fg=white}
+\setbeamercolor{section in head/foot}{fg=white,bg=ucvblue}
+\setbeamercolor{structure}{fg=ucvblue}
+\setbeamercolor{titlelike}{fg=ucvblue}
+\setbeamercolor{frametitle}{fg=ucvblue,bg=white}
+\setbeamercolor{block title}{bg=ucvblue,fg=white}
+\setbeamercolor{block body}{bg=ucvblockbg,fg=darkgray}
+
+% Plantillas para que la navegación superior muestre siempre la sección activa en blanco brillante
+\setbeamertemplate{section in head/foot}{\color{white}\textbf{\insertsectionhead}}
+\setbeamertemplate{section in head/foot shaded}{\color{white!65!ucvblue}\insertsectionhead}
+
+% Hipervínculos activos y seguros
+\hypersetup{
+  colorlinks=true,
+  linkcolor=white,
+  urlcolor=ucvblue,
+  citecolor=ucvblue
+}
+
+% Desactivar iconos inferiores por defecto de beamer
+\setbeamertemplate{navigation symbols}{}
+
+% Tipografía académica de títulos de diapositivas
+\setbeamerfont{frametitle}{series=\bfseries,size=\Large,shape=\itshape}
+
+% Pie de página en tres segmentos institucionales
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.28\paperwidth,ht=2.4ex,dp=1.1ex,left,leftskip=2ex]{palette secondary}%
+    \textbf{\CodigoMateriaPie}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.44\paperwidth,ht=2.4ex,dp=1.1ex,center]{palette primary}%
+    \textit{\TituloPie}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.28\paperwidth,ht=2.4ex,dp=1.1ex,right,rightskip=2ex]{palette secondary}%
+    Semestre 2026 \qquad \insertframenumber{} / \inserttotalframenumber
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+% Macro para láminas de transición de sección con fondo azul sólido
+\newcommand{\LaminaTransicion}[1]{%
+  {%
+    \setbeamercolor{background canvas}{bg=ucvblue}%
+    \begin{frame}[plain]%
+      \centering\vfill%
+      {\Huge \textbf{\color{white} #1}}%
+      \vfill%
+    \end{frame}%
+  }%
+}
+
+% Metadatos globales
+\title[\TituloPie]{\TituloPrincipalLuno{} \TituloPrincipalLdos}
+\author{\EstudianteUno{} \and \EstudianteDos{} \and \EstudianteTres}
+\institute{\Escuela, \Facultad, \Universidad}
+\date{Semestre 2026}
+
+% =============================================================================
+% 4. CONTENIDO DE LA PRESENTACIÓN
+% =============================================================================
+\begin{document}
+
+% -----------------------------------------------------------------------------
+% LÁMINA 1: Portada Institucional
+% -----------------------------------------------------------------------------
+\begin{frame}[plain]
+  \vspace{0.1cm}
+  % Fila superior con logotipos y membrete centrado
+  \noindent
+  \begin{minipage}{0.18\textwidth}
+    \raggedright
+    \includegraphics[height=1.45cm]{\LogoUCV}
+  \end{minipage}%
+  \hfill%
+  \begin{minipage}{0.60\textwidth}
+    \centering
+    {\scriptsize\bfseries \Universidad}\\[-0.5pt]
+    {\scriptsize \Facultad}\\[-0.5pt]
+    {\scriptsize \Escuela}\\[0.5pt]
+    {\scriptsize\bfseries\color{ucvblue} \Materia}
+  \end{minipage}%
+  \hfill%
+  \begin{minipage}{0.18\textwidth}
+    \raggedleft
+    \includegraphics[height=1.45cm]{\LogoIA}
+  \end{minipage}
+
+  \vspace{0.45cm}
+  % Banner horizontal a pantalla completa
+  \noindent\makebox[\linewidth][c]{%
+    \begin{beamercolorbox}[wd=\paperwidth,sep=14pt,center]{palette secondary}
+      {\Large \textbf{\color{ucvblue}\TituloPrincipalLuno\\[4pt]\TituloPrincipalLdos}}
+    \end{beamercolorbox}%
+  }
+
+  \vspace{0.45cm}
+  % Bloques de integrantes y profesor
+  \begin{columns}[t]
+    \begin{column}{0.48\textwidth}
+      \centering
+      {\small \textbf{\color{ucvblue} Integrantes}}\\[7pt]
+      {\normalsize \EstudianteUno}\\[3pt]
+      {\normalsize \EstudianteDos}\\[3pt]
+      {\normalsize \EstudianteTres}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \centering
+      {\small \textbf{\color{ucvblue} Profesor}}\\[7pt]
+      {\normalsize \Profesor}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.6cm}
+  \begin{center}
+    {\footnotesize \Semestre}
+  \end{center}
+\end{frame}
+
+% -----------------------------------------------------------------------------
+% LÁMINA 2: Contenido de la Presentación (Agenda de 5 puntos)
+% -----------------------------------------------------------------------------
+\begin{frame}[t]{Contenido}
+  \vspace{0.3cm}
+  \begin{enumerate}
+    \setlength{\itemsep}{15pt}
+    \item \textbf{\large El problema y por qué importa}
+    \item \textbf{\large Los datos}
+    \item \textbf{\large La tabla de resultados y la discusión}
+    \item \textbf{\large Demostración en vivo de la aplicación}
+    \item \textbf{\large Qué haríamos distinto y conclusiones}
+  \end{enumerate}
+\end{frame}
+
+% =============================================================================
+% SECCIÓN 1: El problema y por qué importa
+% =============================================================================
+\section{El problema}
+
+\LaminaTransicion{El problema y por qué importa}
+
+\begin{frame}{El problema y por qué importa}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Definición de la tarea}
+        \small
+        \textbf{Objetivo práctico:} Clasificar automáticamente el género a partir de una fotografía facial para habilitar interfaces adaptativas y analítica demográfica agregada.\\[6pt]
+        \textbf{Estrategia de solución:} En lugar de entrenar desde cero, reutilizamos un modelo visual de última generación ya entrenado en millones de imágenes para transferir su conocimiento a rostros humanos.
+      \end{block}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Valor para la toma de decisiones}
+        \small
+        \textbf{Eficiencia operativa:} La transferencia de aprendizaje permite crear soluciones de visión por computador confiables en días en lugar de meses, sin requerir infraestructuras de cómputo millonarias.\\[6pt]
+        \textbf{Pregunta clave:} Comprobar si los modelos modernos basados en atención superan a los enfoques tradicionales cuando disponemos de un volumen moderado de datos.
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.12cm}
+  \begin{block}{Consideración ética y uso responsable}
+    \footnotesize
+    \textbf{Alcance estrictamente técnico:} El sistema detecta patrones visuales superficiales en fotografías para fines estadísticos. No determina ni pretende definir la identidad personal ni la identidad de género de ningún individuo.
+  \end{block}
+\end{frame}
+
+% =============================================================================
+% SECCIÓN 2: Los datos
+% =============================================================================
+\section{Los datos}
+
+\LaminaTransicion{Los datos}
+
+\begin{frame}{Conjunto de datos UTKFace}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Composición y equilibrio del catálogo}
+        \scriptsize
+        Trabajamos con 18.000 fotografías del conjunto UTKFace seleccionadas con balance equitativo: 52,3\,\% de hombres y 47,7\,\% de mujeres.\\[3pt]
+        \textbf{Entrenamiento:} 12.600 imágenes para enseñar al modelo.\\
+        \textbf{Validación:} 2.700 imágenes para calibrar el aprendizaje.\\
+        \textbf{Evaluación final:} 2.700 imágenes nunca antes vistas para medir la precisión real.
+      \end{block}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Control de calidad y preparación}
+        \scriptsize
+        Estandarizamos todas las imágenes a un tamaño uniforme de $224 \times 224$ píxeles y aplicamos variaciones controladas de rotación y volteo horizontal para que el sistema aprenda a reconocer rostros en condiciones cotidianas.
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.2cm}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \centering
+      % Gráfico de distribución de clases
+      \includegraphics[width=\textwidth,height=3.1cm,keepaspectratio]{\FigDistribucion}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\textwidth}
+      \centering
+      % Muestra visual de rostros del dataset
+      \includegraphics[width=\textwidth,height=3.1cm,keepaspectratio]{\FigMuestras}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================================
+% SECCIÓN 3: La tabla de resultados y la discusión
+% =============================================================================
+\section{Resultados}
+
+\LaminaTransicion{La tabla de resultados y la discusión}
+
+\begin{frame}{Comparación de opciones evaluadas}
+  \begin{table}[h]
+    \centering
+    \resizebox{\textwidth}{!}{%
+    \begin{tabular}{lcccc}
+      \toprule
+      \textbf{Estrategia evaluada} & \textbf{Pesos ajustados} & \textbf{Tiempo} & \textbf{Precisión validación} & \textbf{Precisión prueba} \\
+      \midrule
+      4.1 Construcción desde cero   & 1.965.890  & 284 s & 69,19\% & 67,04\% \\
+      4.2 Modelo base sin adaptar   & 0          & 23 s  & 64,52\% & 65,41\% \\
+      4.3 Extracción de rasgos      & 1.538      & 243 s & 94,37\% & 93,56\% \\
+      \textbf{4.4 Ajuste fino completo} & \textbf{85.800.194} & \textbf{395 s} & \textbf{95,07\%} & \textbf{94,33\%} \\
+      4.5 Ajuste de capas finales   & 14.178.818 & 273 s & 94,78\% & 93,78\% \\
+      \bottomrule
+    \end{tabular}%
+    }
+  \end{table}
+
+  \vspace{0.1cm}
+  \begin{block}{Conclusiones clave para la toma de decisiones}
+    \scriptsize
+    \textbf{La opción más precisa:} Ajustar el modelo completo logra la máxima efectividad con 94,33\% de aciertos sobre clientes y usuarios nuevos.\\[3pt]
+    \textbf{La opción más eficiente en costos:} Ajustar únicamente la capa final logra 93,56\% de precisión optimizando apenas 1.538 parámetros, ofreciendo el 99\% del rendimiento con un costo de cómputo mínimo.\\[3pt]
+    \textbf{Construir desde cero no es viable:} Solo alcanza 67,04\% de acierto, demostrando que reutilizar conocimiento previo es obligatorio para tener éxito.
+  \end{block}
+\end{frame}
+
+\begin{frame}{Convergencia y matriz de aciertos}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \centering
+      % Curvas de aprendizaje del modelo
+      \includegraphics[width=\textwidth,height=3.4cm,keepaspectratio]{\FigCurvas}
+      
+      \vspace{0.1cm}
+      \begin{block}{Comportamiento del aprendizaje}
+        \scriptsize
+        El modelo aprende de manera fluida y estable. La curva de validación se mantiene firme sin desviarse, asegurando que el sistema generaliza bien y no memoriza fotos.
+      \end{block}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\textwidth}
+      \centering
+      % Matriz de confusión en evaluación final
+      \includegraphics[width=\textwidth,height=3.4cm,keepaspectratio]{\FigConfusion}
+      
+      \vspace{0.1cm}
+      \begin{block}{Desempeño equitativo por clase}
+        \scriptsize
+        Acierta en 95 de cada 100 hombres y en 94 de cada 100 mujeres sobre las 2.700 pruebas independientes, confirmando que la solución no tiene sesgo favorable hacia ningún género.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Análisis de costo versus beneficio}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{El intercambio tecnológico}
+        \small
+        La decisión entre ambas opciones implica un compromiso directo de recursos:\\[6pt]
+        \textbf{Costo de optimización:} Ajustar el modelo completo requiere procesar 55.000 veces más parámetros y 62\,\% más tiempo de cómputo.\\[6pt]
+        \textbf{Beneficio obtenido:} Una mejora neta de 0,77 puntos porcentuales en la exactitud final.\\[6pt]
+        El ajuste de capas finales representa una alternativa intermedia balanceada.
+      \end{block}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\textwidth}
+      \begin{exampleblock}{Criterio de recomendación de negocio}
+        \small
+        \textbf{Para soluciones de bajo costo o móviles:} Recomendamos la extracción de rasgos, ya que demanda mínima memoria y se entrena en minutos sin servidores caros.\\[8pt]
+        \textbf{Para operaciones de alta exigencia:} Recomendamos el ajuste completo cuando cada décima de precisión marque una diferencia decisiva en el servicio.
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% =============================================================================
+% SECCIÓN 4: Demostración en vivo de la aplicación
+% =============================================================================
+\section{Demostración}
+
+\LaminaTransicion{Demostración en vivo de la aplicación}
+
+\begin{frame}{Demostración en vivo de la aplicación}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Servicio central en la nube}
+        \small
+        \textbf{Servidor automatizado:} Provee consultas en tiempo real y verificación de estado operativo.\\[6pt]
+        \textbf{Modelo público en Hugging Face:}\\[2pt]
+        {\footnotesize \href{\RepoHuggingFaceUrl}{\texttt{\RepoHuggingFaceTxt}}}\\[6pt]
+        \textbf{Tiempo de respuesta:} Inferencia optimizada para responder en fracciones de segundo.
+      \end{block}
+    \end{column}
+    \hfill
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Aplicación interactiva para usuarios}
+        \small
+        \textbf{Catálogo de pruebas:} Muestras inmediatas de infantes, adultos y adultos mayores.\\[6pt]
+        \textbf{Carga de fotografías:} Permite subir cualquier imagen desde el computador.\\[6pt]
+        \textbf{Cámara en vivo:} Detección continua con video en directo y visualización de probabilidades.
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.35cm}
+  \begin{center}
+    {\large \textbf{\color{ucvblue}Paso a la demostración práctica:}} {\normalsize Abrimos la aplicación web interactiva para ensayar predicciones en directo.}
+  \end{center}
+\end{frame}
+
+% =============================================================================
+% SECCIÓN 5: Qué haríamos distinto y conclusiones
+% =============================================================================
+\section{Conclusiones}
+
+\LaminaTransicion{Qué haríamos distinto y conclusiones}
+
+\begin{frame}{Análisis de errores y mejoras}
+  \begin{columns}[c]
+    \begin{column}{0.48\textwidth}
+      \centering
+      % Muestra de fallos con alta certeza
+      \includegraphics[width=\textwidth,height=3.3cm,keepaspectratio]{\FigErrores}\\[4pt]
+      {\tiny \textit{Casos donde el sistema falló con alta certeza}}
+    \end{column}
+    \hfill
+    \begin{column}{0.49\textwidth}
+      \begin{block}{¿Por qué se equivocó el sistema?}
+        \scriptsize
+        Al auditar las fallas con mayor certeza, más del 60\% eran fotos mal etiquetadas de origen, como hombres con barba catalogados como mujeres o bebés donde los rasgos aún no están definidos.
+      \end{block}
+
+      \vspace{0.08cm}
+      \begin{block}{¿Qué haríamos con más datos o cómputo?}
+        \scriptsize
+        \textbf{Filtrado de errores en datos:} Detectaríamos y corregiríamos fotos mal catalogadas antes de entrenar para que el modelo aprenda sobre información limpia y confiable.\\[3pt]
+        \textbf{Modelos a mayor escala y biometría:} Probaríamos modelos más grandes o especializados en rostros como VGGFace2 e InsightFace para medir si justifican su costo de inversión.\\[3pt]
+        \textbf{Garantía de equidad demográfica:} Con más volumen de datos, mediríamos el rendimiento por edades y etnias para asegurar un servicio justo y homogéneo en toda la población.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Conclusiones}
+  \begin{block}{Conclusiones ejecutivas}
+    \small
+    \textbf{Éxito rotundo de la transferencia:} Reutilizar modelos preentrenados permitió superar el 93,5\% de exactitud desde la primera iteración, demostrando que es la vía más rápida y rentable para implementar visión artificial en la organización.\\[8pt]
+    \textbf{Solución lista para producción:} Se completó todo el ciclo: validación rigurosa de 5 estrategias, auditoría de fallas, publicación del modelo en la nube y entrega de una aplicación interactiva funcional.
+  \end{block}
+
+  \vspace{0.4cm}
+  \begin{center}
+    {\Large \textbf{\color{ucvblue}¡Muchas gracias por su atención!}}\\[6pt]
+    {\small Modelo público disponible en la nube:}\\[2pt]
+    {\footnotesize \href{\RepoHuggingFaceUrl}{\texttt{\RepoHuggingFaceTxt}}}\\[8pt]
+    {\small \textit{Espacio abierto para preguntas y comentarios del jurado}}
+  \end{center}
+\end{frame}
+
+\end{document}

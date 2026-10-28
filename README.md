@@ -1,48 +1,73 @@
-# Clasificación de género facial con vision transformer - transfer learning y fine-tuning con Hugging Face
+# Clasificación de género facial mediante Vision Transformer y transferencia de aprendizaje
 
 **Redes neuronales profundas - Universidad Central de Venezuela (UCV) - Semestre I-2026**  
 Profesor: Fernando Crema García
 
-Repositorio del proyecto final para la adaptación de un modelo preentrenado del Hub de Hugging Face a la tarea de clasificación de género en rostros a partir del conjunto de datos UTKFace.
+Repositorio del proyecto final para la adaptación de un modelo preentrenado a la tarea de clasificación de género en rostros a partir del catálogo UTKFace.
 
----
+## Resumen del proyecto
+
+Este proyecto evalúa cómo aprovechar modelos modernos de visión artificial para clasificar automáticamente el género de una persona a partir de fotos de rostros en situaciones reales, comparando el costo y la efectividad de distintas estrategias para la toma de decisiones.
+
+### Datos utilizados y distribución
+
+Trabajamos con 18.000 imágenes del catálogo público UTKFace con una distribución equilibrada de 52% hombres y 48% mujeres. Para garantizar que los resultados sean confiables y medibles en situaciones reales, el catálogo se dividió en tres grupos independientes: 12.600 fotografías para entrenar el sistema, 2.700 para supervisar los avances y 2.700 para una prueba final con imágenes que el sistema nunca había visto. Todas las fotos se estandarizaron a 224 píxeles y se aplicaron pequeñas variaciones como giros suaves e iluminación distinta para simular fotos tomadas en el día a día.
+
+### Rendimiento y comparación de estrategias
+
+En lugar de crear un sistema desde cero, evaluamos si convenía transferir el conocimiento de un modelo de visión ya existente llamado Vision Transformer. Los resultados demostraron una clara diferencia de valor. Entrenar un modelo desde la nada sin experiencia previa requirió mucho esfuerzo computacional y apenas alcanzó un 67% de acierto, lo cual es insuficiente para un entorno de negocio. Por el contrario, tomar un modelo ya entrenado y ajustar únicamente su decisión final elevó el acierto a un 93,5% en apenas 4 minutos de cómputo, demostrando una alta rentabilidad entre tiempo invertido y precisión. La mejor estrategia fue permitir que todo el modelo adaptara su atención a los rasgos de rostros humanos, logrando el primer lugar con un 94,3% de acierto general y manteniendo una precisión equilibrada tanto en hombres con 95,3% como en mujeres con 93,7%, lo que confirma que el sistema no tiene sesgos marcados hacia ningún grupo.
+
+### Auditoría de fallas y calidad de la información
+
+Al revisar con lupa los casos donde el sistema se equivocó con alta seguridad, encontramos que más del 60% de los fallos no fueron errores del modelo, sino equivocaciones de origen en el catálogo de datos con etiquetas invertidas de fábrica, sumado a fotos de recién nacidos cuyos rasgos faciales aún no presentan diferenciación visual clara.
+
+### Recomendaciones estratégicas
+
+Para una siguiente fase de inversión recomendamos implementar filtros automáticos de control de calidad para limpiar las etiquetas inconsistentes en la base de datos antes de entrenar, evaluar modelos diseñados exclusivamente para rostros y monitorear la precisión dividida por rangos de edad y etnias para asegurar un desempeño homogéneo en todos los perfiles de usuario.
+
+### Disponibilidad del producto
+
+El modelo ganador se encuentra publicado y disponible en la plataforma Hugging Face con el identificador miguelciav/vit-base-utkface-gender. Además se integró en una aplicación web interactiva que permite a directores y analistas probar el reconocimiento subiendo fotos o evaluando la cámara web en tiempo real.
 
 ## Enlaces del proyecto
 
+* **Presentación del proyecto (PDF):** [docs/presentation/presentation.pdf](docs/presentation/presentation.pdf)
 * **Modelo afinado en el Hub:** [miguelciav/vit-base-utkface-gender](https://huggingface.co/miguelciav/vit-base-utkface-gender)
 * **Modelo base preentrenado:** [google/vit-base-patch16-224](https://huggingface.co/google/vit-base-patch16-224)
 * **Dataset en el Hub:** [nu-delta/utkface](https://huggingface.co/datasets/nu-delta/utkface)
 * **Repositorio del proyecto:** [edwynG/dl-vit-gender-classification](https://github.com/edwynG/dl-vit-gender-classification)
 * **Repositorio plantilla original:** [ucvia/dl26-proyecto](https://github.com/ucvia/dl26-proyecto)
 
----
+
 
 ## Estructura del repositorio
 
 ```text
 dl-vit-gender-classification/
+├── docs/
+│   └── presentation/                        # Presentación oficial de defensa
+│       ├── presentation.pdf                 #   Documento de diapositivas compilado
+│       ├── presentation.tex                 #   Código fuente modular y configurable
+│       └── figures/                         #   Gráficos del dataset, curvas, matriz y logos
 ├── notebook/
-│   └── vit_gender_transfer_learning.ipynb   # Experimentos de transfer learning y fine-tuning (Colab)
-├── api/                                     # API REST: carga el modelo desde el Hub y sirve predicciones
-│   ├── __init__.py                          #   Exporta el Blueprint api_bp
-│   ├── config.py                            #   Lectura de .env (MODEL_ID, DEVICE, DEBUG)
-│   ├── inference.py                         #   Carga única con transformers.pipeline en memoria e inferencia
-│   ├── routes.py                            #   GET /api/health - POST /api/predict/gender
-│   └── tests/test_api.py                    #   Pruebas con el modelo simulado (mock)
-├── web/                                     # Cliente web interactivo que consume el API
-│   ├── __init__.py                          #   Exporta el Blueprint web_bp
-│   ├── routes.py                            #   GET / (renderiza la interfaz gráfica)
-│   ├── templates/                           #   Plantillas Jinja2 (index.html, componentes)
-│   └── static/                              #   CSS, iconos y JavaScript modular (api.js, webcam.js)
-├── .env.example                             # Variables de entorno (MODEL_ID, PORT, DEBUG)
-├── requirements.txt                         # Dependencias exactas del proyecto
-├── app.py                                   # Orquestador que inicia el API y el cliente web
-└── README.md                                # Documentación del proyecto
+│   └── vit_gender_transfer_learning.ipynb   # Experimentos en Google Colab
+├── api/                                     # Servicio de predicción que carga el modelo
+│   ├── config.py                            #   Lectura de variables de configuración
+│   ├── inference.py                         #   Inferencia con el modelo en memoria
+│   ├── routes.py                            #   Rutas del servicio web
+│   └── tests/test_api.py                    #   Pruebas automatizadas
+├── web/                                     # Interfaz web interactiva
+│   ├── routes.py                            #   Ruta principal que sirve la página
+│   ├── templates/                           #   Plantillas visuales
+│   └── static/                              #   Hojas de estilo y código de interacción
+├── .env.example                             # Ejemplo de variables de configuración
+├── requirements.txt                         # Librerías necesarias para ejecutar el proyecto
+├── app.py                                   # Archivo principal que inicia todo el sistema
+└── README.md                                # Documentación general del proyecto
 ```
 
 > **Nota:** Ningún archivo de pesos (`.pth` o `.safetensors`) viaja en el repositorio. El backend descarga y cachea el modelo directamente desde Hugging Face Hub al iniciar.
 
----
 
 ## Regímenes experimentales comparados
 
@@ -54,7 +79,7 @@ En el notebook ([`notebook/vit_gender_transfer_learning.ipynb`](notebook/vit_gen
 4. **Fine-tuning completo:** todas las capas descongeladas con tasa de aprendizaje baja ($2\times 10^{-5}$).
 5. **Experimento adicional (descongelado selectivo):** descongelado progresivo de las últimas capas del encoder de atención, evaluando la eficiencia de parámetros.
 
----
+
 
 ## Extensión de la integración
 
@@ -62,7 +87,6 @@ Como extensión propia para la nota de integración (INT) y el factor $\alpha$, 
 * **Cliente web interactivo con captura en vivo por cámara web y selector de muestras:** la interfaz permite evaluar el modelo en tiempo real mediante imágenes locales, muestras fijas del conjunto de prueba o captura directa desde la cámara web del usuario, comunicándose de forma asíncrona con el endpoint `/api/predict/gender` y midiendo la latencia de inferencia en milisegundos.
 * **Diagnóstico y health check (`/api/health`):** endpoint que reporta el estado de carga del modelo en memoria, el dispositivo en uso (CPU/CUDA) y los segundos requeridos para la descarga inicial.
 
----
 
 ## Cómo correrlo
 
@@ -75,13 +99,13 @@ pip install -r requirements.txt
 # 2. Configurar variables de entorno
 cp .env.example .env
 
-# 3. Correr pruebas automatizadas del API (simulan el modelo, corren en segundos)
+# 3. Correr pruebas automatizadas
 pytest api/tests -q
 
-# 4. Iniciar la aplicación en desarrollo (API y cliente web unificados)
+# 4. Iniciar la aplicación en desarrollo
 python app.py
 
-# Opción en producción con Gunicorn (servidores en la nube como Render):
+# Opción en producción con Gunicorn
 gunicorn app:app --workers 1 --threads 2 --timeout 120
 ```
 
@@ -89,7 +113,6 @@ gunicorn app:app --workers 1 --threads 2 --timeout 120
 * **Health check del API:** [http://localhost:5000/api/health](http://localhost:5000/api/health)
 * **Endpoint de inferencia de género:** `POST http://localhost:5000/api/predict/gender`
 
----
 
 ## Declaración de uso de IA generativa
 
